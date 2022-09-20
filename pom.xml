@@ -70,11 +70,11 @@
             <version>${grpc.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/io.grpc/grpc-netty-shaded -->
-        <!--  <dependency>
+          <dependency>
               <groupId>io.grpc</groupId>
               <artifactId>grpc-netty-shaded</artifactId>
               <version>1.49.0</version>
-          </dependency>-->
+          </dependency>
 
         <dependency>
             <groupId>com.google.protobuf</groupId>
