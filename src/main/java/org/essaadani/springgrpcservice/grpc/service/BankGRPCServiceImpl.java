@@ -1,12 +1,20 @@
 package org.essaadani.springgrpcservice.grpc.service;
 
 import io.grpc.stub.StreamObserver;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.server.service.GrpcService;
+import org.essaadani.springgrpcservice.entities.Currency;
 import org.essaadani.springgrpcservice.grpc.stub.Bank;
 import org.essaadani.springgrpcservice.grpc.stub.BankServiceGrpc;
+import org.essaadani.springgrpcservice.repository.CurrencyRepository;
 
 @GrpcService
+@RequiredArgsConstructor
 public class BankGRPCServiceImpl extends BankServiceGrpc.BankServiceImplBase {
+    CurrencyRepository currencyRepository;
+
     @Override
     public void getBankAccount(Bank.GetBankAccountRequest request, StreamObserver<Bank.GetBankAccountResponse> responseObserver) {
         super.getBankAccount(request, responseObserver);
@@ -23,7 +31,14 @@ public class BankGRPCServiceImpl extends BankServiceGrpc.BankServiceImplBase {
        String from = request.getCurrencyFrom();
        String to = request.getCurrencyTo();
        double amount = request.getAmount();
-       double result = amount*10.8;
+
+       // get currencies from db
+        Currency currencyFrom = currencyRepository.findByName(from);
+        Currency currencyTo = currencyRepository.findByName(to);
+
+        // calculate result
+       double result = amount*(currencyTo.getPrice() / currencyFrom.getPrice());
+
        // prepare response
         Bank.ConvertCurrencyResponse response = Bank.ConvertCurrencyResponse
                 .newBuilder()
