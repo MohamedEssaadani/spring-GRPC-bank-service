@@ -9,10 +9,11 @@ import org.essaadani.springgrpcservice.entities.Currency;
 import org.essaadani.springgrpcservice.grpc.stub.Bank;
 import org.essaadani.springgrpcservice.grpc.stub.BankServiceGrpc;
 import org.essaadani.springgrpcservice.repository.CurrencyRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @GrpcService
-@RequiredArgsConstructor
 public class BankGRPCServiceImpl extends BankServiceGrpc.BankServiceImplBase {
+    @Autowired
     CurrencyRepository currencyRepository;
 
     @Override
@@ -37,7 +38,7 @@ public class BankGRPCServiceImpl extends BankServiceGrpc.BankServiceImplBase {
         Currency currencyTo = currencyRepository.findByName(to);
 
         // calculate result
-       double result = amount*(currencyTo.getPrice() / currencyFrom.getPrice());
+       double result = amount*(currencyFrom.getPrice() / currencyTo.getPrice());
 
        // prepare response
         Bank.ConvertCurrencyResponse response = Bank.ConvertCurrencyResponse
